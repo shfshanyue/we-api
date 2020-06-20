@@ -1,8 +1,8 @@
 {
-  "name": "wechat-media",
+  "name": "we-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "关于微信API的封装，Model Style，并且支持 Typescript",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

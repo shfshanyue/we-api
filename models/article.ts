@@ -3,22 +3,22 @@ import _ from 'lodash'
 
 import Model from '../lib/model'
 
-class Article extends Model {
+export class Article extends Model {
   title: string = '';
-  thumb_media_id: string = '';
+  thumbMediaId: string = '';
   author?: string;
   digest?: string;
   content: string = 'Powerd by weichat-api';
-  content_source_url?: string;
-  show_cover_pic?: 0 | 1 = 1;
-  need_open_comment?: 0 | 1 = 1;
-  only_fans_can_comment?: 0 | 1 = 1;
+  contentSourceUrl?: string;
+  showCoverPic?: 0 | 1 = 1;
+  needOpenComment?: 0 | 1 = 1;
+  onlyFansCanComment?: 0 | 1 = 1;
 
   private static async _create (article: Article | Article[]) {
     const articles = Array.isArray(article) ? article : [article]
     const prepareArticles = await pMap(articles, async article => {
       return {
-        ...article,
+        ..._.mapKeys(article, (value, key) => _.snakeCase(key)),
         content: await this.prepareContent(article.content)
       }
     })
@@ -74,4 +74,3 @@ class Article extends Model {
   }
 }
 
-export { Article }
