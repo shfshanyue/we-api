@@ -1,3 +1,6 @@
+import pMap from 'p-map'
+import _ from 'lodash'
+
 import Model from '../lib/model'
 
 class Article extends Model {
@@ -11,8 +14,14 @@ class Article extends Model {
   need_open_comment?: 0 | 1 = 1;
   only_fans_can_comment?: 0 | 1 = 1;
 
-  private static _create (article: Article | Article[]) {
+  private static async _create (article: Article | Article[]) {
     const articles = Array.isArray(article) ? article : [article]
+    const prepareArticles = await pMap(articles, async article => {
+      return {
+        ...article,
+        content: await this.prepareContent(article.content)
+      }
+    })
     return this.request({
       url: '/material/add_news',
       method: 'POST',
@@ -20,7 +29,7 @@ class Article extends Model {
         access_token: this.accessToken
       },
       data: {
-        articles
+        articles: prepareArticles
       }
     })
   }
@@ -39,10 +48,19 @@ class Article extends Model {
     return data.src
   }
   
-  private static prepareContent (content: string) {
+  private static async prepareContent (content: string) {
     const re = /<img.*?src="(.*?)".*?>/g
+    const match = content.matchAll(re)
+    const imgs = Array.from(match, x => x[1])
+
+    // 批量上传图片
+    const imgCache = await pMap(_.uniq(imgs), async (src) => {
+      const weixinImg = src.includes('mmbiz') ? await this.uploadImage(src) : src
+      return { src, weixinImg }
+    }, { concurrency: 3 })
+    const imgMap = _.keyBy(imgCache, 'src')
     return content.replace(re, (x, src) => {
-      const weixinSrc = await this.uploadImage(src)
+      const weixinSrc = imgMap[src]?.weixinImg || src
       return weixinSrc
     })
   }
@@ -56,4 +74,4 @@ class Article extends Model {
   }
 }
 
-export default Article
+export { Article }

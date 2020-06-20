@@ -20,7 +20,7 @@ class Model {
     return axios.create({
       baseURL: 'https://api.weixin.qq.com/cgi-bin',
       params: {
-        access_token: this.accessToken || 'No Token'
+        access_token: this.accessToken
       }
     })
   }

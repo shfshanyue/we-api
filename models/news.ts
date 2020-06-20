@@ -1,4 +1,4 @@
-import Article from './article'
+import { Article } from './article'
 import Model from '../lib/model'
 
 class News extends Model {
@@ -21,3 +21,4 @@ class News extends Model {
   }
 }
 
+export default Article
