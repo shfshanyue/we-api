@@ -4,6 +4,7 @@
   "description": "关于微信API的封装，Model Style，并且支持 Typescript",
   "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "example": "ts-node examples/article.ts"
   },
