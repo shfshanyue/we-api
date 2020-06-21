@@ -1,6 +1,6 @@
 {
   "name": "we-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "关于微信API的封装，Model Style，并且支持 Typescript",
   "main": "dist/index.js",
   "scripts": {
