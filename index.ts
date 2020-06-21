@@ -1,4 +1,6 @@
 export * from './models/article'
 export * from './models/news'
 
-export * from './lib/wechat'
+import Wechat from './lib/wechat'
+
+export default Wechat

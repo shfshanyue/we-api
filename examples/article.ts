@@ -1,6 +1,5 @@
 import fs from 'fs'
-import { Article } from '../models/article'
-import Wechat from '../lib/wechat'
+import Wechat, { Article } from '../index'
 
 const fsp = fs.promises
 
