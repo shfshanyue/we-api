@@ -22,14 +22,14 @@ async function main() {
   await Article.init({ wechat, modelName: 'article' })
 
   Article.create({
-    thumb_media_id: 'yspyRwTb0m9UyK78TLER8E_wdRSWjp6KJF8d2p_vVP4',
+    thumbMediaId: 'yspyRwTb0m9UyK78TLER8E_wdRSWjp6KJF8d2p_vVP4',
     title: 'hello, world',
     author: 'shanyue',
-    show_cover_pic: 0,
-    content: 'hello, world',
-    content_source_url: 'https://github.com/shfshanyue/Daily-Question/issues/1'
+    showCoverPic: 0,
+    content: '<img src="https://leancloud-gold-cdn.xitu.io/bdfecd06f90e24f88946.jpeg">',
+    contentSourceUrl: 'https://github.com/shfshanyue/Daily-Question/issues/1'
   }).then(o => {
-    console.log(o)
+    console.log(o.status)
   }).catch(error => {
     console.log(error)
   })

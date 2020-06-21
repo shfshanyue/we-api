@@ -38,7 +38,11 @@ class Wechat {
   }
 
   async getAccessToken() {
-    const token = await this.get()
+    let token
+    try {
+      token = await this.get()
+    } catch (e) {
+    }
     if (!token) {
       const refreshToken = await this._getAccessToken()
       await this.set(refreshToken)

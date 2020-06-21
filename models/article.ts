@@ -1,7 +1,11 @@
 import pMap from 'p-map'
 import _ from 'lodash'
+import axios from 'axios'
+import path from 'path'
 
 import Model from '../lib/model'
+
+const formstream = require('formstream')
 
 export class Article extends Model {
   title: string = '';
@@ -17,9 +21,11 @@ export class Article extends Model {
   private static async _create (article: Article | Article[]) {
     const articles = Array.isArray(article) ? article : [article]
     const prepareArticles = await pMap(articles, async article => {
+      const content = await this.prepareContent(article.content)
+      console.log(content)
       return {
         ..._.mapKeys(article, (value, key) => _.snakeCase(key)),
-        content: await this.prepareContent(article.content)
+        content
       }
     })
     return this.request({
@@ -35,17 +41,27 @@ export class Article extends Model {
   }
 
   private static async uploadImage (src: string): Promise<string> {
-    const { data } = await this.request({
-      url: '/media/uploadimg',
-      method: 'POST',
+    const { data: buffer } = await axios({
+      url: src,
+      responseType: 'arraybuffer'
+    })
+
+    // FormData cant work
+    // const form = new FormData()
+    // form.append('media', fs.createReadStream(path.resolve(__dirname, 'hello.jpg')), {
+    //   knownLength: 29506,
+    //   contentType: 'image/jpeg',
+    //   filename: 'hello.jpg'
+    // })
+    const form = formstream();
+    form.buffer('media', buffer, path.basename(src))
+    const { data } = await this.request.post('/media/uploadimg', form, {
+      headers: form.headers(),
       params: {
         access_token: this.accessToken
-      },
-      data: {
-        src
       }
     })
-    return data.src
+    return data.url
   }
   
   private static async prepareContent (content: string) {
@@ -54,12 +70,12 @@ export class Article extends Model {
     const imgs = Array.from(match, x => x[1])
 
     // 批量上传图片
-    const imgCache = await pMap(_.uniq(imgs), async (src) => {
-      const weixinImg = src.includes('mmbiz') ? await this.uploadImage(src) : src
+    const imgList = await pMap(_.uniq(imgs), async (src) => {
+      const weixinImg = src.includes('mmbiz') ? src : await this.uploadImage(src)
       return { src, weixinImg }
     }, { concurrency: 3 })
-    const imgMap = _.keyBy(imgCache, 'src')
-    return content.replace(re, (x, src) => {
+    const imgMap = _.keyBy(imgList, 'src')
+    return content.replace(new RegExp(imgs.join('|')), (src) => {
       const weixinSrc = imgMap[src]?.weixinImg || src
       return weixinSrc
     })
