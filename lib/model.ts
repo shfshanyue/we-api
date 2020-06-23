@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Wechat from './wechat'
+import WechatError from './error'
 
 class Model {
   public static wechat: Wechat;
@@ -17,12 +18,26 @@ class Model {
   }
 
   static get request () {
-    return axios.create({
+    const instance = axios.create({
       baseURL: 'https://api.weixin.qq.com/cgi-bin',
       params: {
         access_token: this.accessToken
       }
     })
+    instance.interceptors.response.use(async res => {
+      const data = res.data
+      if (data.errcode) {
+        // 表示 token 过期
+        if (data.errcode === 42001) {
+          await this.wechat.set('')
+        }
+        throw new WechatError(data.errmsg, data.errcode, {
+          response: res
+        })
+      }
+      return res
+    })
+    return instance
   }
 
   // As interface

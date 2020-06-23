@@ -28,7 +28,7 @@ async function main() {
     content: '<img src="https://leancloud-gold-cdn.xitu.io/bdfecd06f90e24f88946.jpeg">',
     contentSourceUrl: 'https://github.com/shfshanyue/Daily-Question/issues/1'
   }).then(o => {
-    console.log(o.status)
+    // console.log(o)
   }).catch(error => {
     console.log(error)
   })

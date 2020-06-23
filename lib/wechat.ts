@@ -1,18 +1,21 @@
 import axios from 'axios'
 import Model from './model'
 
+const DEFAULT_GET_TOKEN = () => ''
+const DEFAULT_SET_TOKEN = (token: string) => {}
+
 class Wechat {
   appId: string;
   appSecret: string;
-  get: () => Promise<string>;
-  set: (token: string) => Promise<void>;
+  get: () => string | Promise<string>;
+  set: (token: string) => void | Promise<void>;
   models: Record<string, typeof Model>;
 
   constructor(
     appId: string,
     appSecrect: string,
-    get: () => Promise<string>,
-    set: (token: string) => Promise<void>
+    get: () => string | Promise<string> = DEFAULT_GET_TOKEN,
+    set: (token: string) => void | Promise<void> = DEFAULT_SET_TOKEN
   ) {
     this.appId = appId
     this.appSecret = appSecrect
@@ -30,7 +33,6 @@ class Wechat {
         grant_type: 'client_credential'
       }
     })
-    console.log('Fetch token by weixin cgi', data)
     if (data.errorcode) {
       throw new Error(data.errormsg)
     }
