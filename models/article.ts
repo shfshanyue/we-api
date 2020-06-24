@@ -22,7 +22,6 @@ export class Article extends Model {
     const articles = Array.isArray(article) ? article : [article]
     const prepareArticles = await pMap(articles, async article => {
       const content = await this.prepareContent(article.content)
-      console.log(content)
       return {
         ..._.mapKeys(article, (value, key) => _.snakeCase(key)),
         content
@@ -75,7 +74,7 @@ export class Article extends Model {
       return { src, weixinImg }
     }, { concurrency: 3 })
     const imgMap = _.keyBy(imgList, 'src')
-    return content.replace(new RegExp(imgs.join('|')), (src) => {
+    return content.replace(new RegExp(imgs.join('|'), 'g'), (src) => {
       const weixinSrc = imgMap[src]?.weixinImg || src
       return weixinSrc
     })
