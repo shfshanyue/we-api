@@ -74,10 +74,10 @@ export class Article extends Model {
       return { src, weixinImg }
     }, { concurrency: 3 })
     const imgMap = _.keyBy(imgList, 'src')
-    return content.replace(new RegExp(imgs.join('|'), 'g'), (src) => {
+    return imgs.reduce((content, src) => {
       const weixinSrc = imgMap[src]?.weixinImg || src
-      return weixinSrc
-    })
+      return content.replace(src, weixinSrc)
+    }, content)
   }
 
   static create (article: Article) {
