@@ -9,10 +9,10 @@ class Model {
 
   static async init ({ wechat, modelName }: {
     wechat: Wechat;
-    modelName: string;
+    modelName?: string;
   }) {
     this.wechat = wechat
-    this.modelName = modelName
+    this.modelName = modelName || this.name.toLowerCase()
     this.accessToken = await wechat.getAccessToken()
     this.wechat.addModel(this)
   }
