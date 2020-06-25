@@ -5,12 +5,15 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "ts-node examples/article.ts"
+    "test": "mocha test/*.ts -r ts-node/register",
+    "example": "ts-node examples/article.ts",
+    "cov": "nyc --reporter=lcov --reporter=text-summary npm test"
   },
   "author": "shanyue",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^14.0.13",
+    "@types/lodash": "^4.14.155",
     "axios": "^0.19.2",
     "form-data": "^3.0.0",
     "formstream": "^1.1.0",
@@ -18,8 +21,10 @@
     "p-map": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.0.13",
-    "@types/lodash": "^4.14.155",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
   }
