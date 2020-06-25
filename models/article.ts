@@ -7,6 +7,12 @@ import Model from '../lib/model'
 
 const formstream = require('formstream')
 
+interface ArticleResult {
+  media_id: string;
+  url: string;
+  item: any[]
+}
+
 export class Article extends Model {
   title: string = '';
   thumbMediaId: string = '';
@@ -18,7 +24,7 @@ export class Article extends Model {
   needOpenComment?: 0 | 1 = 1;
   onlyFansCanComment?: 0 | 1 = 1;
 
-  private static async _create (article: Article | Article[]) {
+  private static async _create (article: Article | Article[]): Promise<ArticleResult> {
     const articles = Array.isArray(article) ? article : [article]
     const prepareArticles = await pMap(articles, async article => {
       const content = await this.prepareContent(article.content)
@@ -27,7 +33,7 @@ export class Article extends Model {
         content
       }
     })
-    return this.request({
+    const { data } = await this.request({
       url: '/material/add_news',
       method: 'POST',
       params: {
@@ -37,6 +43,7 @@ export class Article extends Model {
         articles: prepareArticles
       }
     })
+    return data
   }
 
   private static async uploadImage (src: string): Promise<string> {
@@ -64,9 +71,9 @@ export class Article extends Model {
   }
   
   private static async prepareContent (content: string) {
-    const re = /<img.*?src="(.*?)".*?>/g
+    const re = /<img.*?src="(.*?)".*?>|background-image: url\((.*?)\)/g
     const match = content.matchAll(re)
-    const imgs = Array.from(match, x => x[1])
+    const imgs = Array.from(match, x => x[1] || x[2])
 
     // 批量上传图片
     const imgList = await pMap(_.uniq(imgs), async (src) => {
