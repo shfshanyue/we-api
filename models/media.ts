@@ -6,7 +6,7 @@ import Model from '../lib/model'
 
 const formstream = require('formstream')
 
-interface MediaResult {
+export interface MediaResult {
   media_id: string;
   url: string;
   item: any[]
