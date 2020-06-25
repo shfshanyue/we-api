@@ -1,5 +1,9 @@
 # Wechat API
 
+[![npm version](https://img.shields.io/npm/v/we-api.svg?style=flat-square)](https://www.npmjs.org/package/we-api)
+[![install size](https://packagephobia.now.sh/badge?p=we-api)](https://packagephobia.now.sh/result?p=we-api)
+[![npm downloads](https://img.shields.io/npm/dm/we-api.svg?style=flat-square)](http://npm-stat.com/charts.html?package=we-api)
+
 基于 Model 形式对微信公众号 API 进行封装，并且支持 `Typescript`。它有以下优点
 
 + 支持 Typescript
@@ -43,3 +47,7 @@ await Article.create({
 ### News
 
 + `News.create(news)`
+
+### Media
+
++ `Media.create(media)`
