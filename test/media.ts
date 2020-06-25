@@ -19,4 +19,17 @@ describe('Wechat Media API', function () {
 
     expect(result.media_id).length.to.gt(10)
   })
+
+  it('expect work with wechat sync', async () => {
+    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+
+    await wechat.sync()
+
+    const result = await wechat.models.media.create({
+      src: 'https://shanyue.tech/wechat.jpeg',
+      type: 'image'
+    })
+
+    expect(result.media_id).length.to.gt(10)
+  })
 })

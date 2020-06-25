@@ -2,9 +2,16 @@ import axios from 'axios'
 import Model from './model'
 import { Article } from '../models/article'
 import { News } from '../models/news'
+import { Media } from '../models/media'
 
 const DEFAULT_GET_TOKEN = () => ''
 const DEFAULT_SET_TOKEN = (token: string) => {}
+
+interface Models {
+  article: typeof Article;
+  news: typeof News;
+  media: typeof Media;
+}
 
 async function createModel (cls: typeof Model, wechat: Wechat) {
   class ExtendModel extends cls {}
@@ -17,7 +24,7 @@ class Wechat {
   appSecret: string;
   get: () => string | Promise<string>;
   set: (token: string) => void | Promise<void>;
-  models: { article: typeof Article; news: typeof News } & Record<string, typeof Model>;
+  models: Models & Record<string, typeof Model>;
 
   constructor(
     appId: string,
@@ -50,6 +57,7 @@ class Wechat {
   async sync() {
     await createModel(Article, this)
     await createModel(News, this)
+    await createModel(Media, this)
   }
 
   async getAccessToken() {
