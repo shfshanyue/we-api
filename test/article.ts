@@ -12,7 +12,7 @@ describe('Wechat Article API', function () {
     await Article.init({ wechat })
 
     const content = `
-      <img src="https://leancloud-gold-cdn.xitu.io/bdfecd06f90e24f88946.jpeg">
+      <img src="https://shanyue.tech/wechat.jpeg">
       <span style="background-image: url(https://img.alicdn.com/tfs/TB1Yycwyrj1gK0jSZFuXXcrHpXa-32-32.png); display: inline-block; width: 18px; height: 18px; background-size: 18px; background-repeat: no-repeat; background-position: center">
     `
 
