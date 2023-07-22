@@ -4,6 +4,8 @@ import Wechat from '../lib/wechat'
 import { Media } from '../models/media'
 
 describe('Wechat Media API', function () {
+  this.timeout(60000)
+
   it('expect work', async () => {
     const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
 

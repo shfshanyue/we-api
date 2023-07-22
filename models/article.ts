@@ -34,7 +34,7 @@ export class Article extends Model {
       }
     })
     const { data } = await this.request({
-      url: '/material/add_news',
+      url: '/draft/add',
       method: 'POST',
       params: {
         access_token: this.accessToken

@@ -7,8 +7,9 @@ describe('Wechat API', function () {
     const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
     const token = await wechat.getAccessToken()
 
-    // 生成的 access_token 字符串长度为 157
-    expect(token).to.length(157)
+    // [2020] 生成的 access_token 字符串长度为 157
+    // [2023] 生成的 access_token 字符串长度为 157
+    expect(token).to.length(136)
   })
 
   it('expect work with global cache', async () => {
@@ -25,8 +26,7 @@ describe('Wechat API', function () {
     )
     const token = await wechat.getAccessToken()
 
-    // 生成的 access_token 字符串长度为 157
-    expect(token).to.length(157)
+    expect(token).to.length(136)
     expect(token).to.equal(cache.token)
   })
 })

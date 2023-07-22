@@ -3,6 +3,7 @@ import Model from './model'
 import { Article } from '../models/article'
 import { News } from '../models/news'
 import { Media } from '../models/media'
+import WechatError from './error'
 
 const DEFAULT_GET_TOKEN = () => ''
 const DEFAULT_SET_TOKEN = (token: string) => {}
@@ -48,8 +49,8 @@ class Wechat {
         grant_type: 'client_credential'
       }
     })
-    if (data.errorcode) {
-      throw new Error(data.errormsg)
+    if (data.errcode) {
+      throw new WechatError(data.errmsg, data.errcode)
     }
     return data.access_token
   }

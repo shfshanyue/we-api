@@ -2,6 +2,7 @@ import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import Wechat from '../lib/wechat'
 import { News } from '../models/news'
+import { Media } from '../models/media'
 
 describe('Wechat News API', function () {
   this.timeout(200000)
@@ -11,7 +12,13 @@ describe('Wechat News API', function () {
     const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
 
     await News.init({ wechat })
-    await News.init({ wechat })
+    await Media.init({ wechat })
+
+    const media = await Media.create({
+      src: 'https://shanyue.tech/wechat.jpeg',
+      type: 'image'
+    })
+    const thumbMediaId = media.media_id
 
     const content = `
       <img src="https://shanyue.tech/wechat.jpeg">
@@ -20,14 +27,14 @@ describe('Wechat News API', function () {
 
     const data = await News.create([
       {
-        thumbMediaId: 'yspyRwTb0m9UyK78TLER8E_wdRSWjp6KJF8d2p_vVP4',
+        thumbMediaId,
         title: 'Hello, shanyue',
         author: 'shanyue',
         showCoverPic: 0,
         content
       },
       {
-        thumbMediaId: 'yspyRwTb0m9UyK78TLER8E_wdRSWjp6KJF8d2p_vVP4',
+        thumbMediaId,
         title: 'Hello, daxiange',
         author: 'shanyue',
         showCoverPic: 0,
