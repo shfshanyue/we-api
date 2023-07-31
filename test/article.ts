@@ -37,4 +37,35 @@ describe('Wechat Article API', function () {
 
     expect(data.media_id).length.to.gt(10)
   })
+
+  it('expect work with unsported image type (svg、webp)', async () => {
+
+    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+
+    await Article.init({ wechat })
+    await Media.init({
+      wechat,
+      modelName: 'media'
+    })
+
+    const content = `
+      <img src="https://shanyue.tech/wechat.jpeg">
+      <img src="https://markdown.devtool.tech/icon.svg">
+    `
+
+    const media = await Media.create({
+      src: 'https://shanyue.tech/wechat.jpeg',
+      type: 'image'
+    })
+
+    const data = await Article.create({
+      thumbMediaId: media.media_id,
+      title: 'Hello, world',
+      author: 'shanyue',
+      showCoverPic: 0,
+      content
+    })
+
+    expect(data.media_id).length.to.gt(10)
+  })
 })

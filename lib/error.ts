@@ -7,7 +7,7 @@ class WechatError extends Error {
     code?: string,
     extensions?: Record<string, any>
   ) {
-    super(message)
+    super(code ? `Wechat Code ${code}: ${message}` : message)
     this.code = code
     this.extensions = extensions
   }

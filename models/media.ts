@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import axios from 'axios'
 import path from 'path'
 
