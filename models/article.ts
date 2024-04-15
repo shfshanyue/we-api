@@ -4,7 +4,7 @@ import path from 'path'
 
 import Model from '../lib/model'
 
-const formstream = require('formstream')
+import formstream from 'formstream'
 
 interface ArticleResult {
   media_id: string;
@@ -45,8 +45,8 @@ export class Article extends Model {
     return data
   }
 
-  private static async uploadImage(src: string): Promise<string> {
-    const { data: buffer } = await axios({
+  private static async uploadImage(src: string, name?: string): Promise<string> {
+    const { data: buffer, headers } = await axios({
       url: src,
       responseType: 'arraybuffer'
     })
@@ -59,7 +59,8 @@ export class Article extends Model {
     //   filename: 'hello.jpg'
     // })
     const form = formstream();
-    form.buffer('media', buffer, path.basename(src))
+    // 这里的 `.jpg` 本来毫无意义，但是微信服务器会根据后缀判断是否可以上传
+    form.buffer('media', buffer, path.basename(src) + '.jpg', headers['content-type'])
     const { data } = await this.request.post('/media/uploadimg', form, {
       headers: form.headers(),
       params: {

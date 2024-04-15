@@ -41,9 +41,9 @@ await Article.create({
 
 ### Article
 
-图文媒体资源，现为草稿
+图文媒体资源，现为草稿。
 
-+ `Article.create(article)`: 上传文章，如果文章内容包含图片，则会自动转成微信域名内图片
++ `Article.create(article)`: 上传文章，如果文章内容包含图片，则会自动转成微信域名内图片。
 + `Article.bulkCreate(article)`: 上传多图文消息
 
 ### News

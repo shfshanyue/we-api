@@ -4,7 +4,7 @@ import { Article } from '../models/article'
 import { Media } from '../models/media'
 
 describe('Wechat Article API', function () {
-  it('expect work', async () => {
+  it('expect work with <img> and barckground-image', async () => {
 
     const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
 
@@ -27,6 +27,36 @@ describe('Wechat Article API', function () {
     const data = await Article.create({
       thumbMediaId: media.media_id,
       title: 'Hello, world',
+      author: 'shanyue',
+      showCoverPic: 0,
+      content
+    })
+
+    expect(data.media_id).length.to.gt(10)
+  })
+
+  it('expect automatic inspection of the content type', async () => {
+
+    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+
+    await Article.init({ wechat })
+    await Media.init({
+      wechat,
+      modelName: 'media'
+    })
+
+    const content = `
+      <img src="https://static.shanyue.tech/images/24-04-12/clipboard-7240.681f82.webp">
+    `
+
+    const media = await Media.create({
+      src: 'https://shanyue.tech/wechat.jpeg',
+      type: 'image'
+    })
+
+    const data = await Article.create({
+      thumbMediaId: media.media_id,
+      title: 'expect automatic inspection of the content type',
       author: 'shanyue',
       showCoverPic: 0,
       content
