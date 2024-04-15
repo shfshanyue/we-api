@@ -1,5 +1,4 @@
-import { describe, it } from 'mocha'
-import { expect } from 'chai'
+import { assert, describe, expect, it } from 'vitest'
 import Wechat from '../lib/wechat'
 
 describe('Wechat API', function () {
