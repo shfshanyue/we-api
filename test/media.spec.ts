@@ -26,7 +26,7 @@ describe.runIf(hasCredentials)('Wechat Media API', function () {
 
     await wechat.sync()
 
-    const viaModels = await wechat.models.media.create({
+    const viaModels = await wechat.models.media!.create({
       src: 'https://shanyue.tech/wechat.jpeg',
       type: 'image'
     })

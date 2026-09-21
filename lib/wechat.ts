@@ -36,10 +36,13 @@ class Wechat {
   appSecret: string;
   get: () => string | Promise<string>;
   set: (token: string) => void | Promise<void>;
-  models: Models & Record<string, typeof Model>;
+  models: Partial<Models> & Record<string, typeof Model>;
   options: WechatOptions;
   private refreshPromise?: Promise<string>;
 
+  /**
+   * @param appSecrect WeChat app secret (parameter name kept for compatibility).
+   */
   constructor(
     appId: string,
     appSecrect: string,
@@ -51,7 +54,7 @@ class Wechat {
     this.appSecret = appSecrect
     this.get = get
     this.set = set
-    this.models = {} as any
+    this.models = {}
     this.options = {
       strictImages: options.strictImages ?? DEFAULT_WECHAT_OPTIONS.strictImages,
       remoteFetch: { ...DEFAULT_WECHAT_OPTIONS.remoteFetch, ...options.remoteFetch }

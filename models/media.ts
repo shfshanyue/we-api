@@ -8,7 +8,7 @@ import formstream from 'formstream'
 export interface MediaResult {
   media_id: string;
   url: string;
-  item: any[]
+  item: Record<string, unknown>[];
 }
 
 export class Media extends Model {
