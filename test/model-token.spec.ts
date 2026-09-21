@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { getAdapter } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import Wechat from '../lib/wechat'
 import { Article } from '../models/article'
@@ -51,7 +51,7 @@ describe('Model access token retry', () => {
     let draftCountRequests = 0
     vi.spyOn(axios, 'create').mockImplementation((config) => {
       const instance = axiosCreate(config!)
-      const baseAdapter = instance.defaults.adapter!
+      const baseAdapter = getAdapter(instance.defaults.adapter)
       instance.defaults.adapter = async (config) => {
         const url = config.url ?? ''
         if (url.includes('/draft/count')) {
