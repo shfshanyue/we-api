@@ -85,6 +85,40 @@ const status = await Publish.getStatus({ publishId: publish_id })
 + `Article.update({ mediaId, index, article })`: 更新草稿（`content` 会走与 create 相同的图片转链逻辑）
 + `Article.destroy({ mediaId })`: 删除草稿
 
+### DataCube
+
+公众号数据统计（[微信数据统计接口](https://developers.weixin.qq.com/doc/subscription/guide/product/analysis_data/analysis_data.html)）。请求参数统一为 `beginDate` / `endDate`（`yyyy-MM-dd`），对应微信侧的 `begin_date` / `end_date`。
+
+用户数据：
+
++ `DataCube.getUserSummary(range)`: 用户增减
++ `DataCube.getUserCumulate(range)`: 累计用户
+
+图文数据：
+
++ `DataCube.getArticleSummary(range)`: 群发图文每日数据
++ `DataCube.getUserReadHour(range)` / `DataCube.getUserShareHour(range)`: 阅读、转发分时
++ `DataCube.getUserRead(range)` / `DataCube.getUserShare(range)`: 阅读、转发概况
++ `DataCube.getArticleTotal(range)`: 群发总数据（微信已标记停止维护）
++ `DataCube.getArticleRead(range)` / `DataCube.getArticleShare(range)`: 发表内容每日阅读、分享
++ `DataCube.getBizSummary(range)` / `DataCube.getArticleTotalDetail(range)`: 发表内容概况与明细
+
+消息数据：`getUpstreamMsg`、`getUpstreamMsgWeek`、`getUpstreamMsgMonth`、`getUpstreamMsgHour`、`getUpstreamMsgDist`、`getUpstreamMsgDistWeek`、`getUpstreamMsgDistMonth`
+
+接口数据：`getInterfaceSummary`、`getInterfaceSummaryHour`
+
+``` ts
+import Wechat, { DataCube } from 'we-api'
+
+const wechat = new Wechat(appId, appSecret)
+await wechat.sync()
+
+const { list } = await DataCube.getUserSummary({
+  beginDate: '2024-01-01',
+  endDate: '2024-01-07'
+})
+```
+
 ### Publish
 
 发布能力（草稿发布到公众号）。

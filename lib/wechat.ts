@@ -4,6 +4,7 @@ import { Article } from '../models/article'
 import { News } from '../models/news'
 import { Media } from '../models/media'
 import { Publish } from '../models/publish'
+import { DataCube } from '../models/datacube'
 import WechatError from './error'
 import type { RemoteFetchOptions } from './remote-fetch'
 
@@ -29,6 +30,7 @@ interface Models {
   news: typeof News;
   media: typeof Media;
   publish: typeof Publish;
+  datacube: typeof DataCube;
 }
 
 class Wechat {
@@ -95,6 +97,7 @@ class Wechat {
     await News.init({ wechat: this, modelName: 'news' })
     await Media.init({ wechat: this, modelName: 'media' })
     await Publish.init({ wechat: this, modelName: 'publish' })
+    await DataCube.init({ wechat: this, modelName: 'datacube' })
   }
 
   async getAccessToken() {
