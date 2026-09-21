@@ -16,6 +16,7 @@
   },
   "author": "shanyue",
   "license": "ISC",
+  "packageManager": "pnpm@11.23.0",
   "dependencies": {
     "@types/node": "^20.12.7",
     "axios": "^1.6.8",
