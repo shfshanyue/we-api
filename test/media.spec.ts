@@ -24,11 +24,18 @@ describe('Wechat Media API', function () {
 
     await wechat.sync()
 
-    const result = await wechat.models.media.create({
+    const viaModels = await wechat.models.media.create({
       src: 'https://shanyue.tech/wechat.jpeg',
       type: 'image'
     })
 
-    expect(result.media_id).length.to.gt(10)
+    expect(viaModels.media_id).length.to.gt(10)
+
+    const viaExport = await Media.create({
+      src: 'https://shanyue.tech/wechat.jpeg',
+      type: 'image'
+    })
+
+    expect(viaExport.media_id).length.to.gt(10)
   })
 })

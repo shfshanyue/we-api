@@ -17,7 +17,16 @@ class Model {
     this.wechat.addModel(this)
   }
 
+  protected static assertInitialized () {
+    if (!this.wechat) {
+      throw new Error(
+        `${this.name} is not initialized. Call await ${this.name}.init({ wechat }) or await wechat.sync() first.`
+      )
+    }
+  }
+
   static get request () {
+    this.assertInitialized()
     const instance = axios.create({
       baseURL: 'https://api.weixin.qq.com/cgi-bin',
       params: {

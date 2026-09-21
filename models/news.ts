@@ -6,8 +6,4 @@ export class News extends Model {
     await Article.init({ wechat: this.wechat })
     return Article.bulkCreate(news)
   }
-
-  static findAndCountAll () {
-    
-  }
 }

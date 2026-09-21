@@ -16,12 +16,6 @@ interface Models {
   publish: typeof Publish;
 }
 
-async function createModel (cls: typeof Model, wechat: Wechat) {
-  class ExtendModel extends cls {}
-  await ExtendModel.init({ wechat, modelName: cls.name.toLowerCase() })
-  return ExtendModel
-}
-
 class Wechat {
   appId: string;
   appSecret: string;
@@ -58,10 +52,10 @@ class Wechat {
   }
 
   async sync() {
-    await createModel(Article, this)
-    await createModel(News, this)
-    await createModel(Media, this)
-    await createModel(Publish, this)
+    await Article.init({ wechat: this, modelName: 'article' })
+    await News.init({ wechat: this, modelName: 'news' })
+    await Media.init({ wechat: this, modelName: 'media' })
+    await Publish.init({ wechat: this, modelName: 'publish' })
   }
 
   async getAccessToken() {
