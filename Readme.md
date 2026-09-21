@@ -111,6 +111,25 @@ const status = await Publish.getStatus({ publishId: publish_id })
 
 微信接口错误。`code` 为数字型 `errcode`，可通过 `error.extensions` 查看原始响应。
 
+### Wechat 选项
+
+构造函数第 5 个参数为可选 `WechatOptions`：
+
+``` ts
+const wechat = new Wechat(appId, appSecret, getToken, setToken, {
+  strictImages: false,
+  remoteFetch: {
+    timeoutMs: 30_000,
+    maxBytes: 10 * 1024 * 1024,
+    allowPrivateIp: false,
+    allowedHosts: ['cdn.example.com']
+  }
+})
+```
+
++ `strictImages`：默认为 `false`。为 `true` 时，正文图片转链失败会直接抛错，而不是保留原 URL。
++ `remoteFetch`：拉取远程图片/素材时的 HTTP 限制。默认拒绝 `http(s)` 以外的协议及 localhost、内网段等主机名（非完整 SSRF 防护）；可通过 `allowedHosts` 白名单进一步收紧。
+
 ## Development
 
 使用 pnpm 11+ 开发时，依赖安装脚本的放行策略见根目录 `pnpm-workspace.yaml` 中的 `allowBuilds`；`package.json` 的 `packageManager` 锁定 pnpm 版本（需 `corepack enable`）。
