@@ -5,9 +5,24 @@ import { News } from '../models/news'
 import { Media } from '../models/media'
 import { Publish } from '../models/publish'
 import WechatError from './error'
+import type { RemoteFetchOptions } from './remote-fetch'
+
+export type { RemoteFetchOptions } from './remote-fetch'
+
+export interface WechatOptions {
+  strictImages?: boolean;
+  remoteFetch?: RemoteFetchOptions;
+}
 
 const DEFAULT_GET_TOKEN = () => ''
 const DEFAULT_SET_TOKEN = (token: string) => {}
+
+const DEFAULT_WECHAT_OPTIONS: Required<Pick<WechatOptions, 'strictImages'>> & {
+  remoteFetch: RemoteFetchOptions;
+} = {
+  strictImages: false,
+  remoteFetch: {}
+}
 
 interface Models {
   article: typeof Article;
@@ -22,19 +37,25 @@ class Wechat {
   get: () => string | Promise<string>;
   set: (token: string) => void | Promise<void>;
   models: Models & Record<string, typeof Model>;
+  options: WechatOptions;
   private refreshPromise?: Promise<string>;
 
   constructor(
     appId: string,
     appSecrect: string,
     get: () => string | Promise<string> = DEFAULT_GET_TOKEN,
-    set: (token: string) => void | Promise<void> = DEFAULT_SET_TOKEN
+    set: (token: string) => void | Promise<void> = DEFAULT_SET_TOKEN,
+    options: WechatOptions = {}
   ) {
     this.appId = appId
     this.appSecret = appSecrect
     this.get = get
     this.set = set
     this.models = {} as any
+    this.options = {
+      strictImages: options.strictImages ?? DEFAULT_WECHAT_OPTIONS.strictImages,
+      remoteFetch: { ...DEFAULT_WECHAT_OPTIONS.remoteFetch, ...options.remoteFetch }
+    }
   }
 
   private async _getAccessToken(): Promise<string> {

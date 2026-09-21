@@ -1,7 +1,7 @@
-import axios from 'axios'
 import path from 'path'
 
 import Model from '../lib/model'
+import { fetchRemoteBuffer } from '../lib/remote-fetch'
 
 import formstream from 'formstream'
 
@@ -18,10 +18,10 @@ export class Media extends Model {
   src: string = '';
 
   static async create (media: Media): Promise<MediaResult> {
-    const { data: buffer } = await axios({
-      url: media.src,
-      responseType: 'arraybuffer'
-    })
+    const { buffer } = await fetchRemoteBuffer(
+      media.src,
+      this.wechat.options.remoteFetch
+    )
     const form = formstream();
     form.buffer('media', buffer, path.basename(media.src))
     const { data } = await this.request.post('/material/add_material', form, {

@@ -1,8 +1,8 @@
 import { map, mapKeys, snakeCase, uniq, keyBy } from 'midash'
-import axios from 'axios'
 import path from 'path'
 
 import Model from '../lib/model'
+import { fetchRemoteBuffer } from '../lib/remote-fetch'
 
 import formstream from 'formstream'
 
@@ -69,10 +69,10 @@ export class Article extends Model {
   }
 
   private static async uploadImage(src: string, name?: string): Promise<string> {
-    const { data: buffer, headers } = await axios({
-      url: src,
-      responseType: 'arraybuffer'
-    })
+    const { buffer, headers } = await fetchRemoteBuffer(
+      src,
+      this.wechat.options.remoteFetch
+    )
 
     const form = formstream();
     // 这里的 `.jpg` 本来毫无意义，但是微信服务器会根据后缀判断是否可以上传
@@ -96,7 +96,17 @@ export class Article extends Model {
 
     // 批量上传图片
     const imgList = await map(uniq(imgs), async (src) => {
-      const weixinImg = src.includes('mmbiz') ? src : await this.uploadImage(src).catch(e => '')
+      let weixinImg = src
+      if (!src.includes('mmbiz')) {
+        try {
+          weixinImg = await this.uploadImage(src)
+        } catch (error) {
+          if (this.wechat.options.strictImages) {
+            throw error
+          }
+          weixinImg = ''
+        }
+      }
       return { src, weixinImg }
     }, { concurrency: 3 })
     const imgMap = keyBy(imgList, x => x.src)
