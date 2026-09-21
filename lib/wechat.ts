@@ -22,6 +22,7 @@ class Wechat {
   get: () => string | Promise<string>;
   set: (token: string) => void | Promise<void>;
   models: Models & Record<string, typeof Model>;
+  private refreshPromise?: Promise<string>;
 
   constructor(
     appId: string,
@@ -40,7 +41,7 @@ class Wechat {
     const { data } = await axios.request({
       url: 'https://api.weixin.qq.com/cgi-bin/token',
       params: {
-        appId: this.appId,
+        appid: this.appId,
         secret: this.appSecret,
         grant_type: 'client_credential'
       }
@@ -51,6 +52,20 @@ class Wechat {
     return data.access_token
   }
 
+  async refreshAccessToken(): Promise<string> {
+    if (!this.refreshPromise) {
+      this.refreshPromise = this._getAccessToken()
+        .then(async (token) => {
+          await this.set(token)
+          return token
+        })
+        .finally(() => {
+          this.refreshPromise = undefined
+        })
+    }
+    return this.refreshPromise
+  }
+
   async sync() {
     await Article.init({ wechat: this, modelName: 'article' })
     await News.init({ wechat: this, modelName: 'news' })
@@ -59,15 +74,9 @@ class Wechat {
   }
 
   async getAccessToken() {
-    let token
-    try {
-      token = await this.get()
-    } catch (e) {
-    }
+    const token = await this.get()
     if (!token) {
-      const refreshToken = await this._getAccessToken()
-      await this.set(refreshToken)
-      return refreshToken
+      return this.refreshAccessToken()
     }
     return token
   }
