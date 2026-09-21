@@ -36,9 +36,6 @@ export class Publish extends Model {
     const { data } = await this.request({
       url: '/freepublish/submit',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         media_id: mediaId
       }
@@ -50,9 +47,6 @@ export class Publish extends Model {
     const { data } = await this.request({
       url: '/freepublish/get',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         publish_id: publishId
       }
@@ -64,9 +58,6 @@ export class Publish extends Model {
     const { data } = await this.request({
       url: '/freepublish/batchget',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         offset: params.offset,
         count: params.count,
@@ -80,9 +71,6 @@ export class Publish extends Model {
     const { data } = await this.request({
       url: '/freepublish/getarticle',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         article_id: articleId
       }
@@ -100,9 +88,6 @@ export class Publish extends Model {
     const { data } = await this.request({
       url: '/freepublish/delete',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         article_id: articleId,
         index

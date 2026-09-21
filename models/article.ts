@@ -61,9 +61,6 @@ export class Article extends Model {
     const { data } = await this.request({
       url: '/draft/add',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         articles: prepareArticles
       }
@@ -87,10 +84,7 @@ export class Article extends Model {
       contentType != null ? String(contentType) : undefined
     )
     const { data } = await this.request.post('/media/uploadimg', form, {
-      headers: form.headers(),
-      params: {
-        access_token: this.accessToken
-      }
+      headers: form.headers()
     })
     return data.url
   }
@@ -135,9 +129,6 @@ export class Article extends Model {
     const { data } = await this.request({
       url: '/draft/get',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         media_id: mediaId
       }
@@ -149,9 +140,6 @@ export class Article extends Model {
     const { data } = await this.request({
       url: '/draft/batchget',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         offset: params.offset,
         count: params.count,
@@ -164,10 +152,7 @@ export class Article extends Model {
   static async count (): Promise<ArticleDraftCountResult> {
     const { data } = await this.request({
       url: '/draft/count',
-      method: 'GET',
-      params: {
-        access_token: this.accessToken
-      }
+      method: 'GET'
     })
     return data
   }
@@ -185,9 +170,6 @@ export class Article extends Model {
     const { data } = await this.request({
       url: '/draft/update',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         media_id: mediaId,
         index,
@@ -201,9 +183,6 @@ export class Article extends Model {
     const { data } = await this.request({
       url: '/draft/delete',
       method: 'POST',
-      params: {
-        access_token: this.accessToken
-      },
       data: {
         media_id: mediaId
       }

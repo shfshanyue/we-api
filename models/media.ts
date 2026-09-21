@@ -27,7 +27,6 @@ export class Media extends Model {
     const { data } = await this.request.post('/material/add_material', form, {
       headers: form.headers(),
       params: {
-        access_token: this.accessToken,
         type: media.type
       }
     })
