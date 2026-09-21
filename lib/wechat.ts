@@ -3,6 +3,7 @@ import Model from './model'
 import { Article } from '../models/article'
 import { News } from '../models/news'
 import { Media } from '../models/media'
+import { Publish } from '../models/publish'
 import WechatError from './error'
 
 const DEFAULT_GET_TOKEN = () => ''
@@ -12,6 +13,7 @@ interface Models {
   article: typeof Article;
   news: typeof News;
   media: typeof Media;
+  publish: typeof Publish;
 }
 
 async function createModel (cls: typeof Model, wechat: Wechat) {
@@ -59,6 +61,7 @@ class Wechat {
     await createModel(Article, this)
     await createModel(News, this)
     await createModel(Media, this)
+    await createModel(Publish, this)
   }
 
   async getAccessToken() {

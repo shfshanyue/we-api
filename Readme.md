@@ -37,6 +37,19 @@ await Article.create({
 })
 ```
 
+发布草稿示例：
+
+``` ts
+import Wechat, { Article, Publish } from 'we-api'
+
+const wechat = new Wechat(appId, appSecret)
+await wechat.sync()
+
+const draft = await Article.create({ /* ... */ })
+const { publish_id } = await Publish.submit({ mediaId: draft.media_id })
+const status = await Publish.getStatus({ publishId: publish_id })
+```
+
 ## API
 
 ### Article
@@ -45,6 +58,21 @@ await Article.create({
 
 + `Article.create(article)`: 上传文章，如果文章内容包含图片，则会自动转成微信域名内图片。
 + `Article.bulkCreate(article)`: 上传多图文消息
++ `Article.findOne({ mediaId })`: 获取草稿详情
++ `Article.findAll({ offset, count, noContent? })`: 获取草稿列表
++ `Article.count()`: 获取草稿总数
++ `Article.update({ mediaId, index, article })`: 更新草稿（`content` 会走与 create 相同的图片转链逻辑）
++ `Article.destroy({ mediaId })`: 删除草稿
+
+### Publish
+
+发布能力（草稿发布到公众号）。
+
++ `Publish.submit({ mediaId })`: 提交发布任务
++ `Publish.getStatus({ publishId })`: 查询发布状态
++ `Publish.batchGet({ offset, count, noContent? })`: 获取已发布消息列表
++ `Publish.getArticle({ articleId })`: 获取已发布图文详情
++ `Publish.destroy({ articleId, index? })`: 删除已发布文章
 
 ### News
 
@@ -57,3 +85,7 @@ await Article.create({
 图文资源，如图片等
 
 + `Media.create(media)`
+
+### WechatError
+
+微信接口错误。`code` 为数字型 `errcode`，可通过 `error.extensions` 查看原始响应。

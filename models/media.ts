@@ -3,7 +3,7 @@ import path from 'path'
 
 import Model from '../lib/model'
 
-const formstream = require('formstream')
+import formstream from 'formstream'
 
 export interface MediaResult {
   media_id: string;

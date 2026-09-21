@@ -1,15 +1,19 @@
 class WechatError extends Error {
-  readonly code?: string;
+  readonly code?: number;
   readonly extensions?: Record<string, any>;
 
   constructor(
     message: string,
-    code?: string,
+    code?: number | string,
     extensions?: Record<string, any>
   ) {
-    super(code ? `Wechat Code ${code}: ${message}` : message)
-    this.code = code
+    const numCode =
+      code != null && !Number.isNaN(Number(code)) ? Number(code) : undefined
+    super(numCode != null ? `Wechat Code ${numCode}: ${message}` : message)
+    this.name = 'WechatError'
+    this.code = numCode
     this.extensions = extensions
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 }
 
