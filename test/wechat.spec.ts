@@ -1,9 +1,11 @@
 import { assert, describe, expect, it } from 'vitest'
 import Wechat from '../lib/wechat'
 
-describe('Wechat API', function () {
+const hasCredentials = Boolean(process.env.APP_ID && process.env.APP_SECRET)
+
+describe.runIf(hasCredentials)('Wechat API', function () {
   it('expect work', async () => {
-    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+    const wechat = new Wechat(process.env.APP_ID!, process.env.APP_SECRET!)
     const token = await wechat.getAccessToken()
 
     // [2020] 生成的 access_token 字符串长度为 157
@@ -14,8 +16,8 @@ describe('Wechat API', function () {
   it('expect work with global cache', async () => {
     const cache: Record<string, any> = {}
     const wechat = new Wechat(
-      process.env.APP_ID || '',
-      process.env.APP_SECRET || '',
+      process.env.APP_ID!,
+      process.env.APP_SECRET!,
       () => {
         return cache.token
       },

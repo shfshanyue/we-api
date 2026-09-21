@@ -3,10 +3,12 @@ import Wechat from '../lib/wechat'
 import { News } from '../models/news'
 import { Media } from '../models/media'
 
-describe('Wechat News API', function () {
+const hasCredentials = Boolean(process.env.APP_ID && process.env.APP_SECRET)
+
+describe.runIf(hasCredentials)('Wechat News API', function () {
   it('expect work', async () => {
 
-    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+    const wechat = new Wechat(process.env.APP_ID!, process.env.APP_SECRET!)
 
     await News.init({ wechat })
     await Media.init({ wechat })

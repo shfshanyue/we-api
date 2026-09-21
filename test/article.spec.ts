@@ -3,10 +3,12 @@ import Wechat from '../lib/wechat'
 import { Article } from '../models/article'
 import { Media } from '../models/media'
 
-describe('Wechat Article API', function () {
+const hasCredentials = Boolean(process.env.APP_ID && process.env.APP_SECRET)
+
+describe.runIf(hasCredentials)('Wechat Article API', function () {
   it('expect work with <img> and barckground-image', async () => {
 
-    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+    const wechat = new Wechat(process.env.APP_ID!, process.env.APP_SECRET!)
 
     await Article.init({ wechat })
     await Media.init({
@@ -37,7 +39,7 @@ describe('Wechat Article API', function () {
 
   it('expect automatic inspection of the content type', async () => {
 
-    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+    const wechat = new Wechat(process.env.APP_ID!, process.env.APP_SECRET!)
 
     await Article.init({ wechat })
     await Media.init({
@@ -67,7 +69,7 @@ describe('Wechat Article API', function () {
 
   it('expect work with unsported image type (svg、webp)', async () => {
 
-    const wechat = new Wechat(process.env.APP_ID || '', process.env.APP_SECRET || '')
+    const wechat = new Wechat(process.env.APP_ID!, process.env.APP_SECRET!)
 
     await Article.init({ wechat })
     await Media.init({
