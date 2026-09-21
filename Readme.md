@@ -18,7 +18,28 @@
 $ npm i we-api
 ```
 
-使用 `we-api` 进行素材上传
+### 初始化 Model
+
+推荐一次性注册全部 Model（草稿、素材、发布等）：
+
+``` ts
+import Wechat, { Article, Publish } from 'we-api'
+
+const wechat = new Wechat(appId, appSecret)
+await wechat.sync()
+
+// 之后可直接使用导出的 Model 类，或通过 wechat.models.article 等访问同一套 API
+await Article.create({ /* ... */ })
+```
+
+只需部分能力时，可对单个 Model 调用 `init`（需自行传入 `wechat`）：
+
+``` ts
+await Article.init({ wechat, modelName: 'article' })
+await Media.init({ wechat, modelName: 'media' })
+```
+
+使用 `we-api` 进行素材上传（单 Model 初始化示例）
 
 ``` ts
 import Wechat, { Article } from 'we-api'
